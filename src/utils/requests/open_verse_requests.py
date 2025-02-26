@@ -1,4 +1,6 @@
 import requests
+import base64
+import logging as logger
 import os
 from dotenv import load_dotenv
 
@@ -14,7 +16,7 @@ class OpenVerseRequests:
     def _get(self, endpoint):
         pass
 
-    def _post(self, endpoint, payload, headers=None):
+    def _post(self, endpoint, payload, headers=None, **kwargs):
         response = self.request.post(url=f"{self.__url}{endpoint}", headers=headers,
                                      data=payload)
         return response
@@ -37,16 +39,22 @@ class OpenVerseRequests:
         Passes the credentials from V1 to fetch the V2 API token.
         :return:
         """
-        load_dotenv("../../../secrets.env")
+        load_dotenv("/Users/peter/apps/open-verse-api/secrets.env") # Need to use absolute path
         client_id = os.environ.get("CLIENT_ID")
         client_secret = os.environ.get("CLIENT_SECRET")
+        logger.info(client_id)
+        # Encode credentials
+        encoded_creds = base64.b64encode(f"{client_id}:{client_secret}".encode()).decode()
 
         headers = {
-            "Content-Type" : "application/x-www-form-urlencoded",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Authorization": f"Basic {encoded_creds}"
         }
 
         data = {
-            "grant_type": f"client_credentials&client_id={client_id}&client_secret={client_secret}"
+            "grant_type": "client_credentials"
+            # "client_id": client_id,
+            # "client_secret": client_secret
         }
 
         response = self._post(endpoint=self.token_endpoint, payload=data, headers=headers)
