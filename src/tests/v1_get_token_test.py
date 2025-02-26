@@ -11,7 +11,7 @@ email = os.environ.get("EMAIL")
 
 class TestRegisterUser:
 
-    @pytest.mark.register_user_positve
+    @pytest.mark.register_user_positive
     def test_register_new_user(self):
         """
         This test generates a random name and creates an open verse api account.
@@ -34,7 +34,6 @@ class TestRegisterUser:
 
 
 @pytest.mark.v2_get_token
-def test_get_v2_token():
-    ovr = OpenVerseRequests()
-    response = ovr.get_v2_token()
-    logger.info(response)
+def test_get_v2_token(fetch_v2_token):
+    logger.info(fetch_v2_token)
+
