@@ -2,7 +2,7 @@ import pytest
 from dotenv import load_dotenv
 import os
 import base64
-from src.utils.requests.open_verse_requests import OpenVerseRequests
+from src.utils.requests.register_endpoint import RegisterEndpoint
 
 
 load_dotenv("/home/exolab/git-repo/open-verse-api/secrets.env")
@@ -35,11 +35,11 @@ def fetch_v2_token(build_token_header):
     data = {
         "grant_type" : "client_credentials"
     }
-    ovr = OpenVerseRequests()
+    ovr = RegisterEndpoint()
     token = ovr._post(endpoint=ovr.token_endpoint(),
                       headers=build_token_header,
                       data=data)
-    return token.json()['access_token']
+    yield token.json()['access_token']
 
 
 @pytest.fixture(scope="session")
@@ -53,7 +53,8 @@ def v2_header(fetch_v2_token, **kwargs):
         "Authorization": f"Bearer {fetch_v2_token}"
     }
 
-    # Some logic that checks to see if there are kwargs then
-    # add them to the header
+    yield header
+
+
 
 

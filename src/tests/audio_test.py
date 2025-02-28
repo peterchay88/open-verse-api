@@ -1,8 +1,7 @@
 import pytest
 import logging as logger
-
 from src.tests.conftest import v2_header
-from src.utils.requests.open_verse_requests import OpenVerseRequests
+from src.utils.requests.audio_endpoint import AudioEndpoint
 
 
 pytestmark = [pytest.mark.audio]
@@ -22,8 +21,8 @@ class TestAudio:
         :return:
         """
         logger.info("Running audio tests")
-        ovr = OpenVerseRequests()
-        result = ovr.get_audio_search(token_header=v2_header, params=query_param)
+        audio = AudioEndpoint()
+        result = audio.get_audio_search(token_header=v2_header, params=query_param)
         logger.info("%s", result['result_count'])
         # logger.info(result)
         # TODO: Figure out how we assert what we return

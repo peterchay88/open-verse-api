@@ -1,6 +1,6 @@
 import os
 import pytest
-from src.utils.requests.open_verse_requests import OpenVerseRequests
+from src.utils.requests.register_endpoint import RegisterEndpoint
 import logging as logger
 from src.utils.helpers.random_generator import RandomGenerator
 from dotenv import load_dotenv
@@ -18,7 +18,7 @@ class TestRegisterUser:
         1. Generate random name
         :return:
         """
-        ovr = OpenVerseRequests()
+        ovr = RegisterEndpoint()
         random_name = RandomGenerator.random_name()
         logger.info("Random name generated: %s", random_name)
         response = ovr.get_v1_creds(name=random_name, description="For Testing", email=email)
