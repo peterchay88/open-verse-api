@@ -14,7 +14,7 @@ class TestAudio:
         pytest.param("dog+cat", marks=pytest.mark.audio_dog_and_cat),
         pytest.param("%22Giacomo%20Puccini%22", marks=pytest.mark.exact_match),
     ])
-    def test_audio(self, query_param, v2_header):
+    def test_audio_OVA_T1(self, query_param, v2_header):
         """
         This test confirms we receive the expected response when
         hitting the audio endpoint with the supplied parameters
