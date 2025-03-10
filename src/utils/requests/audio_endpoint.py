@@ -6,7 +6,7 @@ class AudioEndpoint(BaseRequests):
 
     def __init__(self):
         super().__init__()
-        self.__audio_endpoint = "v1/audio/?q="
+        self.__audio_endpoint = "v1/audio/"
 
     # ------------------------------------------------------------------------
     # Getter methods
@@ -25,6 +25,9 @@ class AudioEndpoint(BaseRequests):
         Hits the get audio endpoint
         :return:
         """
+        data = {
+            "q" : params
+        }
         logger.info("Sending GET request to %s with params %s", self.__audio_endpoint, params)
-        response = super().get(endpoint=f"{self.__audio_endpoint}{params}", headers=token_header)
+        response = super().get(endpoint=f"{self.__audio_endpoint}", headers=token_header, params=data)
         return response.json()
