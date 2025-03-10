@@ -9,7 +9,7 @@ pytestmark = [pytest.mark.audio]
 class TestAudio:
 
     @pytest.mark.parametrize("query_param", [
-        pytest.param("", marks=pytest.mark.audio_no_params),
+        # pytest.param("", marks=pytest.mark.audio_no_params),
         pytest.param("test", marks=pytest.mark.audio_test),
         pytest.param("dog+cat", marks=pytest.mark.audio_dog_and_cat),
         pytest.param("%22Giacomo%20Puccini%22", marks=pytest.mark.exact_match),

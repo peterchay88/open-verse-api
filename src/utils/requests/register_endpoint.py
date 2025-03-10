@@ -36,5 +36,5 @@ class RegisterEndpoint(BaseRequests):
             "description": description,
             "email": email
         }
-        response = self._post(endpoint=self.__register_endpoint, data=data)
+        response = self.post(endpoint=self.__register_endpoint, data=data)
         return response.json()

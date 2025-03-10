@@ -36,7 +36,7 @@ def fetch_v2_token(build_token_header):
         "grant_type" : "client_credentials"
     }
     ovr = RegisterEndpoint()
-    token = ovr._post(endpoint=ovr.token_endpoint(),
+    token = ovr.post(endpoint=ovr.token_endpoint(),
                       headers=build_token_header,
                       data=data)
     yield token.json()['access_token']

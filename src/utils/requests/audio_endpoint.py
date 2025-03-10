@@ -26,5 +26,5 @@ class AudioEndpoint(BaseRequests):
         :return:
         """
         logger.info("Sending GET request to %s with params %s", self.__audio_endpoint, params)
-        response = super()._get(endpoint=f"{self.__audio_endpoint}{params}", headers=token_header)
+        response = super().get(endpoint=f"{self.__audio_endpoint}{params}", headers=token_header)
         return response.json()

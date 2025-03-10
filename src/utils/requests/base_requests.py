@@ -29,7 +29,7 @@ class BaseRequests(RequestBluePrint):
         self._validate_status_code(status_code=response.status_code, expected_status_code=expected_status_code)
         return response
 
-    def post(self, endpoint : str, data : str = None, json : dict = None,
+    def post(self, endpoint: str, data = None, json: dict = None,
               expected_status_code:int = 200, **kwargs):
         """
         Wrapper for POST requests
@@ -42,7 +42,7 @@ class BaseRequests(RequestBluePrint):
 
 
     @staticmethod
-    def _validate_status_code(status_code : int, expected_status_code : int = 200) -> None:
+    def _validate_status_code(status_code: int, expected_status_code: int = 200) -> None:
         """
         Check the returned status code of a request call and assert it against what is expected
         :param status_code:

@@ -14,8 +14,7 @@ class TestCasesEndpoint(ZephyrBaseRequest):
     def set_endpoint(self, endpoint: str):
         self.__endpoint = endpoint
 
-    def get_testcase(self, project_key: str, folder_id: int = None, max_results: int = 10,
-                     start_at: int = 0):
+    def get_testcase(self, project_key: str, folder_id: int = None, max_results: int = 10, start_at: int = 0):
         data = {
             "projectKey" : project_key,
             "folderID" : folder_id,
