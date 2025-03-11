@@ -3,8 +3,8 @@ import logging as logger
 from src.tests.conftest import v2_header
 from src.utils.requests.audio_endpoint import AudioEndpoint
 
-
 pytestmark = [pytest.mark.audio]
+
 
 class TestAudio:
 
