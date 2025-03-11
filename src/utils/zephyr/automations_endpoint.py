@@ -30,8 +30,13 @@ class AutomationsEndpoint(ZephyrBaseRequest):
         return response
 
 
-if __name__ == "__main__":
+
+def main():
     automation = AutomationsEndpoint()
     response = automation.upload_junit_xml(project_key="OVA", file="junitxml_report.xml")
     print(response)
     print(response.json())
+
+
+if __name__ == "__main__":
+    main()
