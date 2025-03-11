@@ -48,7 +48,7 @@ class ZephyrBaseRequest:
 
         response = self.__requests.post(url=f"{self.__base_url}{endpoint}", data=data,
                                         json=json, headers=self.__header, **kwargs)
-        # self.__validate_status_code(status_code=response.status_code, expected_status_code=expected_status_code)
+        self.__validate_status_code(status_code=response.status_code, expected_status_code=expected_status_code)
         return response
 
     @staticmethod

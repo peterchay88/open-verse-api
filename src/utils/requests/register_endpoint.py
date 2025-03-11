@@ -28,7 +28,8 @@ class RegisterEndpoint(BaseRequests):
 
     def get_v1_creds(self, name : str, description : str, email : str):
         """
-        Sends a POST request to register a user to the open verse api
+        Sends a POST request to register a user to the open verse api.
+        Expected status code for successful request is 201
         :return:
         """
         data = {
@@ -36,5 +37,5 @@ class RegisterEndpoint(BaseRequests):
             "description": description,
             "email": email
         }
-        response = self.post(endpoint=self.__register_endpoint, data=data)
+        response = self.post(endpoint=self.__register_endpoint, data=data, expected_status_code=201)
         return response.json()
