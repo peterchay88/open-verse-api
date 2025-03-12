@@ -45,6 +45,13 @@ class BaseRequests(RequestBluePrint):
         self._validate_status_code(response=response, expected_status_code=expected_status_code)
         return response
 
+    def put(self):
+        """
+        Wrapper for PUT requests
+        :return:
+        """
+        pass
+
     @staticmethod
     def _validate_status_code(response, expected_status_code: int = 200) -> None:
         """

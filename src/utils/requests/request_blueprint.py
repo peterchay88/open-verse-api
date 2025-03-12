@@ -39,6 +39,14 @@ class RequestBluePrint(ABC):
         """
         pass
 
+    @abstractmethod
+    def put(self):
+        """
+        Wrapper for PUT requests
+        :return:
+        """
+        pass
+
     @staticmethod
     @abstractmethod
     def _validate_status_code(status_code: int, expected_status_code: int = 200) -> None:

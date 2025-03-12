@@ -1,4 +1,4 @@
-from src.utils.requests.base_requests import BaseRequests
+from src.utils.api_endpoints.base_requests import BaseRequests
 import logging as logger
 
 

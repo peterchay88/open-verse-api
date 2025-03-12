@@ -1,7 +1,7 @@
 import pytest
 import logging as logger
 from tests.conftest import v2_header
-from src.utils.requests.audio_endpoint import AudioEndpoint
+from src.utils.api_endpoints.audio_endpoint import AudioEndpoint
 
 pytestmark = [pytest.mark.audio]
 

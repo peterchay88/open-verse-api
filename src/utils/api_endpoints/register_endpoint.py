@@ -1,5 +1,4 @@
-import logging as logger
-from src.utils.requests.base_requests import BaseRequests
+from src.utils.api_endpoints.base_requests import BaseRequests
 
 
 class RegisterEndpoint(BaseRequests):
@@ -12,21 +11,31 @@ class RegisterEndpoint(BaseRequests):
     # ------------------------------------------------------------------------
     # Getter methods
     # ------------------------------------------------------------------------
+    @property
     def url(self):
-        return super().base_url() + self.register_endpoint()
+        return super().base_url() + self.register_endpoint
 
+    @property
     def register_endpoint(self):
         return self.__register_endpoint
 
+    @register_endpoint.setter
+    def register_endpoint(self, value: str):
+        self.__register_endpoint = value
+
+    @property
     def token_endpoint(self):
         return self.__token_endpoint
 
+    @token_endpoint.setter
+    def token_endpoint(self, value: str):
+        self.__token_endpoint = value
 
     # ------------------------------------------------------------------------
     # Methods for tests
     # ------------------------------------------------------------------------
 
-    def get_v1_creds(self, name : str, description : str, email : str):
+    def get_v1_creds(self, name: str, description: str, email: str):
         """
         Sends a POST request to register a user to the open verse api.
         Expected status code for successful request is 201

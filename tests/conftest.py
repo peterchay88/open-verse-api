@@ -2,7 +2,7 @@ import pytest
 from dotenv import load_dotenv
 import os
 import base64
-from src.utils.requests.register_endpoint import RegisterEndpoint
+from src.utils.api_endpoints.register_endpoint import RegisterEndpoint
 import datetime
 import logging as logger
 
@@ -57,7 +57,7 @@ def fetch_v2_token(build_token_header):
         "grant_type": "client_credentials"
     }
     ovr = RegisterEndpoint()
-    token = ovr.post(endpoint=ovr.token_endpoint(),
+    token = ovr.post(endpoint=ovr.token_endpoint,
                      headers=build_token_header,
                      data=data)
     yield token.json()['access_token']
@@ -73,5 +73,6 @@ def v2_header(fetch_v2_token, **kwargs):
     header = {
         "Authorization": f"Bearer {fetch_v2_token}"
     }
-
+    logger.info("Auth header fetched.")
     yield header
+    logger.info("Test is done")

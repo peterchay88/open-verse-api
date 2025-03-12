@@ -1,6 +1,6 @@
 import os
 import pytest
-from src.utils.requests.register_endpoint import RegisterEndpoint
+from src.utils.api_endpoints.register_endpoint import RegisterEndpoint
 import logging as logger
 from src.utils.helpers.random_generator import RandomGenerator
 from dotenv import load_dotenv
