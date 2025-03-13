@@ -12,17 +12,25 @@ class TestAudio:
         # pytest.param("", marks=pytest.mark.audio_no_params),
         pytest.param("test", marks=pytest.mark.audio_test),
         pytest.param("dog+cat", marks=pytest.mark.audio_dog_and_cat),
-        pytest.param("%22Giacomo%20Puccini%22", marks=pytest.mark.exact_match),
+        pytest.param("Giacomo Puccini", marks=pytest.mark.giacomo_puccini),
     ])
-    def test_audio_OVA_T1(self, query_param, v2_header):
+    def test_audio_OVA_T1(self, query_param, page, page_size, v2_header):
         """
         This test confirms we receive the expected response when
         hitting the audio endpoint with the supplied parameters
         :return:
         """
+        params = {
+            "q": query_param,
+            "page": page,
+            "page_size": page_size
+        }
         logger.info("Running audio tests")
         audio = AudioEndpoint()
-        result = audio.get_audio_search(token_header=v2_header, params=query_param)
+        result = audio.get_audio_search(token_header=v2_header, params=params)
         logger.info("%s", result['result_count'])
         # logger.info(result)
-        # TODO: Figure out how we assert what we return
+        for key, value in result['results'][0].items():
+            pass
+
+

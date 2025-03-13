@@ -34,11 +34,11 @@ class AudioEndpoint(BaseRequests):
         Hits the get audio endpoint
         :return:
         """
-        data = {
-            "q": params
-        }
+        # data = {
+        #     "q": params
+        # }
         logger.info("Sending GET request to %s with params %s", self.__audio_endpoint, params)
-        response = super().get(endpoint=f"{self.__audio_endpoint}", headers=token_header, params=data)
+        response = super().get(endpoint=f"{self.__audio_endpoint}", headers=token_header, params=params)
         return response.json()
 
 
