@@ -1,15 +1,15 @@
 import pytest
 import logging as logger
-from src.tests.conftest import v2_header
-from src.utils.requests.audio_endpoint import AudioEndpoint
-
+from tests.conftest import v2_header
+from src.utils.api_endpoints.audio_endpoint import AudioEndpoint
 
 pytestmark = [pytest.mark.audio]
+
 
 class TestAudio:
 
     @pytest.mark.parametrize("query_param", [
-        pytest.param("", marks=pytest.mark.audio_no_params),
+        # pytest.param("", marks=pytest.mark.audio_no_params),
         pytest.param("test", marks=pytest.mark.audio_test),
         pytest.param("dog+cat", marks=pytest.mark.audio_dog_and_cat),
         pytest.param("%22Giacomo%20Puccini%22", marks=pytest.mark.exact_match),

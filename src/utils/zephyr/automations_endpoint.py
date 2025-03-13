@@ -1,6 +1,6 @@
 from src.utils.zephyr.base_requests import ZephyrBaseRequest
 import logging as logger
-
+import os
 
 
 class AutomationsEndpoint(ZephyrBaseRequest):
@@ -8,7 +8,7 @@ class AutomationsEndpoint(ZephyrBaseRequest):
     def __init__(self):
         super().__init__()
         self.__endpoint = "/automations/executions/junit"
-        self.__xml_file_path = "/home/exolab/git-repo/open-verse-api/xml/"
+        self.__xml_file_path = f"{os.getcwd()}/xml/"
 
     def endpoint(self):
         return self.__endpoint
@@ -18,8 +18,8 @@ class AutomationsEndpoint(ZephyrBaseRequest):
 
     def upload_junit_xml(self, project_key: str, file: str, auto_create_test: bool = False):
         params = {
-            "projectKey" : project_key,
-            "autoCreateTestCases" : auto_create_test
+            "projectKey": project_key,
+            "autoCreateTestCases": auto_create_test
         }
 
         with open(f"{self.__xml_file_path}{file}", "rb") as f:
@@ -30,9 +30,12 @@ class AutomationsEndpoint(ZephyrBaseRequest):
         return response
 
 
-if __name__ == "__main__":
+def main():
     automation = AutomationsEndpoint()
     response = automation.upload_junit_xml(project_key="OVA", file="junitxml_report.xml")
     print(response)
     print(response.json())
 
+
+if __name__ == "__main__":
+    main()
