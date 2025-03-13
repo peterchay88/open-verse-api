@@ -1,3 +1,5 @@
+from email.policy import default
+
 import pytest
 from dotenv import load_dotenv
 import os
@@ -8,11 +10,23 @@ import logging as logger
 
 load_dotenv("/home/exolab/git-repo/open-verse-api/secrets.env")
 
+# --------------------------------------------------------------------------------
+# Set and define pytest arguments
+# --------------------------------------------------------------------------------
 
 def pytest_addoption(parser):
     parser.addoption("--reports", action="store_true", default=False,
                      help="If flag is set pytest will generate a html report in the reports folder")
+    parser.addoption("--page", type=int, default=1, help="Sets what page to return from the response")
+    parser.addoption("--page_size", type=int, default=1, help="Sets the number of results to return per page")
 
+@pytest.fixture()
+def page(request):
+    return request.config.getoption("--page")
+
+@pytest.fixture()
+def page_size(request):
+    return request.config.getoption("--page_size")
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_configure(config):
