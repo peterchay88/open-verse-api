@@ -42,6 +42,7 @@ def page_size(request):
 @pytest.hookimpl(tryfirst=True)
 def pytest_configure(config):
     """
+    Runs once before any tests are collected or executed.
     Checks to see if the reports and/or xml flag was specified. If so it generates an HTML/XML report.
     :param config:
     :return:
@@ -64,6 +65,30 @@ def pytest_collection_modifyitems(items):
     for item in items:
         item.name = item.name.upper()
         item._nodeid = item._nodeid.upper()
+
+
+@pytest.hookimpl(trylast=True)
+def pytest_unconfigure(config):
+    """
+    Runs after all tests have been executed.
+    if XML and Zephyr flag were specified pushes generated XML to Zephyr
+    :param config:
+    :return:
+    """
+    logger.basicConfig(level=logger.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    log = logger.getLogger(__name__)
+
+    if config.getoption("--zephyr"):
+        try:
+            zephyr = AutomationsEndpoint()
+            response = \
+                zephyr.upload_junit_xml(project_key="OVA", file=f"{current_time}_{config.getoption('-m')}_report.xml")
+            log.info("Push to zephyr successful!")
+            log.info(response)
+            log.info(response.json())
+            # TODO: Figure out why logs do not write to CLI on successful push to zephyr
+        except FileNotFoundError as e:
+            log.error(f"Error nothing to push up to zephyr, please make sure you ran test with '--xml' flag: {e}")
 
 
 # --------------------------------------------------------------------------------
@@ -109,6 +134,7 @@ def fetch_v2_token(build_token_header):
 def v2_header(fetch_v2_token, request, **kwargs):
     """
     Creates the header necessary for V2 api requests
+    :param request:
     :param fetch_v2_token:
     :return:
     """
@@ -117,24 +143,4 @@ def v2_header(fetch_v2_token, request, **kwargs):
     }
     logger.info("Auth header fetched.")
     yield header
-    # if request.config.getoption("--zephyr"):
-    #     zephyr = AutomationsEndpoint()
-    #     response = \
-    #         zephyr.upload_junit_xml(project_key="OVA",
-    #                                 file=f"{current_time}_{request.config.getoption('-m')}_report.xml")
-    #     logger.info(response)
-    #     logger.info(response.json())
     logger.info("Test is done")
-
-# @pytest.fixture()
-# def push_to_zephyr(request):
-#     """
-#     Push completed test run up to zephyr
-#     :return:
-#     """
-#     if request.config.getoption("--zephyr"):
-#         zephyr = AutomationsEndpoint()
-#         response =
-#         zephyr.upload_junit_xml(project_key="OVA", file=f"xml/{current_time}_{request.config.getoption('-m')}_report.xml")
-#         logger.info(response)
-#         logger.info(response.json())
