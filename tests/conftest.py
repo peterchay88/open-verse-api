@@ -11,6 +11,7 @@ load_dotenv(f"{os.getcwd()}/secrets.env")
 time = datetime.datetime.now()
 current_time = f"{time.year}-{time.month}-{time.day}_{time.hour}:{time.minute}:{time.second}"
 
+
 # --------------------------------------------------------------------------------
 # Set and define pytest arguments
 # --------------------------------------------------------------------------------
@@ -21,18 +22,22 @@ def pytest_addoption(parser):
     parser.addoption("--xml", action="store_true", default=False,
                      help="If flag is set pytest will generate a Junit XML file in the XML folder")
     parser.addoption("--zephyr", action="store_true", default=False,
-                     help="If flag is set pytest will push Junit file to zephyr and create a test cycle base off the results"
+                     help="If flag is set pytest will push Junit file to zephyr and create a test cycle base off "
+                          "the results"
                           "Need to specify the XML flag as well in order to work as expected.")
     parser.addoption("--page", type=int, default=1, help="Sets what page to return from the response")
     parser.addoption("--page_size", type=int, default=1, help="Sets the number of results to return per page")
+
 
 @pytest.fixture()
 def page(request):
     return request.config.getoption("--page")
 
+
 @pytest.fixture()
 def page_size(request):
     return request.config.getoption("--page_size")
+
 
 @pytest.hookimpl(tryfirst=True)
 def pytest_configure(config):
@@ -46,6 +51,19 @@ def pytest_configure(config):
 
     if config.getoption("--xml"):
         config.option.xmlpath = f"xml/{current_time}_{config.getoption('-m')}_report.xml"
+        logger.info("Generated XML")
+
+
+@pytest.hookimpl
+def pytest_collection_modifyitems(items):
+    """
+    Modify test names to be all uppercase. Needed for XML file to be recognized by zephyr.
+    :param items:
+    :return:
+    """
+    for item in items:
+        item.name = item.name.upper()
+        item._nodeid = item._nodeid.upper()
 
 
 # --------------------------------------------------------------------------------
@@ -99,12 +117,13 @@ def v2_header(fetch_v2_token, request, **kwargs):
     }
     logger.info("Auth header fetched.")
     yield header
-    if request.config.getoption("--zephyr"):
-        zephyr = AutomationsEndpoint()
-        response =  \
-            zephyr.upload_junit_xml(project_key="OVA", file=f"{current_time}_{request.config.getoption('-m')}_report.xml")
-        logger.info(response)
-        logger.info(response.json())
+    # if request.config.getoption("--zephyr"):
+    #     zephyr = AutomationsEndpoint()
+    #     response = \
+    #         zephyr.upload_junit_xml(project_key="OVA",
+    #                                 file=f"{current_time}_{request.config.getoption('-m')}_report.xml")
+    #     logger.info(response)
+    #     logger.info(response.json())
     logger.info("Test is done")
 
 # @pytest.fixture()
@@ -115,6 +134,7 @@ def v2_header(fetch_v2_token, request, **kwargs):
 #     """
 #     if request.config.getoption("--zephyr"):
 #         zephyr = AutomationsEndpoint()
-#         response = zephyr.upload_junit_xml(project_key="OVA", file=f"xml/{current_time}_{request.config.getoption('-m')}_report.xml")
+#         response =
+#         zephyr.upload_junit_xml(project_key="OVA", file=f"xml/{current_time}_{request.config.getoption('-m')}_report.xml")
 #         logger.info(response)
 #         logger.info(response.json())

@@ -32,7 +32,7 @@ class AutomationsEndpoint(ZephyrBaseRequest):
 
 def main():
     automation = AutomationsEndpoint()
-    response = automation.upload_junit_xml(project_key="OVA", file="junitxml_report.xml")
+    response = automation.upload_junit_xml(project_key="OVA", file="2025-3-14_22:20:17__report.xml")
     print(response)
     print(response.json())
 
