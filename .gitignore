@@ -2,3 +2,6 @@ secrets.env
 .venv/
 .idea
 xml/
+__pycache__/
+reports/
+logs/

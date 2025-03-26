@@ -13,6 +13,9 @@ Please create test cases (Positive and Negative) for the below endpoints
 - GET /v1/audio/ 
 - GET /v1/audio/stats/ 
 
+## Zephyr Integration
+Please provide a automated logic for sending the test results up to Zephyr
+
 Bonus Tests:
 On the /v1/audio/ endpoint response, assert the first entry in results array has the field “id” and the value is a valid UUID v4
 Automate the email verification process while keeping your email credentials stored securely
