@@ -7,6 +7,7 @@ import datetime
 import logging as logger
 from src.utils.zephyr.automations_endpoint import AutomationsEndpoint
 from pyboxen import boxen
+import sys
 
 load_dotenv(f"{os.getcwd()}/secrets.env")
 time = datetime.datetime.now()
@@ -57,8 +58,9 @@ def pytest_configure(config):
         config.option.xmlpath = f"xml/{current_time}_{config.getoption('-m')}_report.xml"
         logger.info("Generated XML")
 
+    # If log generation is not configured in pytest.ini configure logs and generate with below args
     if not config.option.log_file:
-        config.option.log_file = f"logs/{current_time}_{config.getoption('-m')}_logs.txt"
+        config.option.log_file = f"logs/{current_time}_{config.getoption('-m')}_logs.log"
 
 
 def capitalize_test_names(items):
@@ -72,19 +74,6 @@ def capitalize_test_names(items):
         item.name = item.name.upper()
         item._nodeid = item._nodeid.upper()
 
-    test_list = [item.name for item in items]
-    test_list_string = "\n".join(test_list)
-    print(
-        boxen(
-            test_list_string,
-            title="Collected Tests To Run",
-            subtitle_alignment="left",
-            color="blue",
-            padding=1,
-        )
-    )
-    # TODO: Currently the above prints ALL tests. Need to reconfigure so it only runs tests that have been collected
-
 
 @pytest.hookimpl
 def pytest_collection_modifyitems(items):
@@ -94,6 +83,25 @@ def pytest_collection_modifyitems(items):
     :return:
     """
     capitalize_test_names(items)
+
+
+@pytest.hookimpl
+def pytest_collection_finish(session):
+    """
+    This hook prints out the collected tests to be run
+    :param session:
+    :return:
+    """
+    collected_tests = [item.nodeid for item in session.items]
+    print(
+        boxen(
+            "\n".join(collected_tests),
+            title="Collected Tests To Run",
+            subtitle_alignment="left",
+            color="blue",
+            padding=1
+        )
+    )
 
 
 @pytest.hookimpl(trylast=True)
@@ -122,6 +130,8 @@ def pytest_unconfigure(config):
                 padding=1
             )
         )
+
+
 # --------------------------------------------------------------------------------
 # Define fixtures for fetching auth token
 # --------------------------------------------------------------------------------
