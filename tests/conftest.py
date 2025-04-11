@@ -62,6 +62,7 @@ def capitalize_test_names(items):
     :param items:
     :return:
     """
+    print("")  # For padding on output
     for item in items:
         item.name = item.name.upper()
         item._nodeid = item._nodeid.upper()
@@ -98,17 +99,21 @@ def pytest_unconfigure(config):
     :param config:
     :return:
     """
-    logger.basicConfig(level=logger.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    log = logger.getLogger(__name__)
+    print("Hello World")
+    # logger.basicConfig(level=logger.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+    # log = logger.getLogger(__name__)
 
     if config.getoption("--zephyr"):
         try:
             zephyr = AutomationsEndpoint()
             response = \
                 zephyr.upload_junit_xml(project_key="OVA", file=f"{current_time}_{config.getoption('-m')}_report.xml")
-            log.info("Push to zephyr successful!")
-            log.info(response)
-            log.info(response.json())
+            # log.info("Push to zephyr successful!")
+            print("Push to zephyr successful")
+            # log.info(response)
+            print(response)
+            # log.info(response.json())
+            print(response.json())
             # TODO: Figure out why logs do not write to CLI on successful push to zephyr
         except FileNotFoundError as e:
             log.error(f"Error nothing to push up to zephyr, please make sure you ran test with '--xml' flag: {e}")
