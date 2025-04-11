@@ -6,6 +6,7 @@ from src.utils.api_endpoints.register_endpoint import RegisterEndpoint
 import datetime
 import logging as logger
 from src.utils.zephyr.automations_endpoint import AutomationsEndpoint
+from pyboxen import boxen
 
 load_dotenv(f"{os.getcwd()}/secrets.env")
 time = datetime.datetime.now()
@@ -61,11 +62,22 @@ def capitalize_test_names(items):
     :param items:
     :return:
     """
-    print("")
     for item in items:
         item.name = item.name.upper()
         item._nodeid = item._nodeid.upper()
-        print(item.name)
+
+    test_list = [item.name for item in items]
+    test_list_string = "\n".join(test_list)
+    print(
+        boxen(
+            test_list_string,
+            title="Collected Tests To Run",
+            subtitle_alignment="left",
+            color="blue",
+            padding=1,
+        )
+    )
+    # TODO: Currently the above prints ALL tests. Need to reconfigure so it only runs tests that have been collected
 
 
 @pytest.hookimpl
