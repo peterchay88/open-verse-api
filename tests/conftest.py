@@ -99,26 +99,23 @@ def pytest_unconfigure(config):
     :param config:
     :return:
     """
-    print("Hello World")
-    # logger.basicConfig(level=logger.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
-    # log = logger.getLogger(__name__)
-
     if config.getoption("--zephyr"):
         try:
             zephyr = AutomationsEndpoint()
             response = \
                 zephyr.upload_junit_xml(project_key="OVA", file=f"{current_time}_{config.getoption('-m')}_report.xml")
-            # log.info("Push to zephyr successful!")
-            print("Push to zephyr successful")
-            # log.info(response)
-            print(response)
-            # log.info(response.json())
-            print(response.json())
-            # TODO: Figure out why logs do not write to CLI on successful push to zephyr
+            zephyr_response = f"Response: {response}\n{response.json()}"
         except FileNotFoundError as e:
-            log.error(f"Error nothing to push up to zephyr, please make sure you ran test with '--xml' flag: {e}")
+            zephyr_response = \
+                f"Error nothing to push up to zephyr, please make sure you ran test with '--xml' flag: {e}"
 
-
+    print(
+        boxen(
+            zephyr_response,
+            color="#45b39d",
+            title="Push To Zephyr"
+        )
+    )
 # --------------------------------------------------------------------------------
 # Define fixtures for fetching auth token
 # --------------------------------------------------------------------------------
