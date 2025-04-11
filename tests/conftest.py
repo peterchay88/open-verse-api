@@ -55,16 +55,27 @@ def pytest_configure(config):
         logger.info("Generated XML")
 
 
-@pytest.hookimpl
-def pytest_collection_modifyitems(items):
+def capitalize_test_names(items):
     """
     Modify test names to be all uppercase. Needed for XML file to be recognized by zephyr.
     :param items:
     :return:
     """
+    print("")
     for item in items:
         item.name = item.name.upper()
         item._nodeid = item._nodeid.upper()
+        print(item.name)
+
+
+@pytest.hookimpl
+def pytest_collection_modifyitems(items):
+    """
+    pytest hook function that will be used to modify test attributes
+    :param items:
+    :return:
+    """
+    capitalize_test_names(items)
 
 
 @pytest.hookimpl(trylast=True)
