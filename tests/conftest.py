@@ -26,6 +26,8 @@ def pytest_addoption(parser):
                      help="If flag is set pytest will push Junit file to zephyr and create a test cycle base off "
                           "the results"
                           "Need to specify the XML flag as well in order to work as expected.")
+    parser.addoption("--logs", action="store_true", default=False,
+                     help="If flag is specified pytest will generate a log.txt file")
     parser.addoption("--page", type=int, default=1, help="Sets what page to return from the response")
     parser.addoption("--page_size", type=int, default=1, help="Sets the number of results to return per page")
 
@@ -54,6 +56,9 @@ def pytest_configure(config):
     if config.getoption("--xml"):
         config.option.xmlpath = f"xml/{current_time}_{config.getoption('-m')}_report.xml"
         logger.info("Generated XML")
+
+    if not config.option.log_file:
+        config.option.log_file = f"logs/{current_time}_{config.getoption('-m')}_logs.txt"
 
 
 def capitalize_test_names(items):
@@ -109,13 +114,14 @@ def pytest_unconfigure(config):
             zephyr_response = \
                 f"Error nothing to push up to zephyr, please make sure you ran test with '--xml' flag: {e}"
 
-    print(
-        boxen(
-            zephyr_response,
-            color="#45b39d",
-            title="Push To Zephyr"
+        print(
+            boxen(
+                zephyr_response,
+                color="#f0cd7b",
+                title="Push To Zephyr",
+                padding=1
+            )
         )
-    )
 # --------------------------------------------------------------------------------
 # Define fixtures for fetching auth token
 # --------------------------------------------------------------------------------
