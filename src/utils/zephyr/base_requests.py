@@ -84,3 +84,10 @@ class ZephyrBaseRequest:
                      status_code, expected_status_code)
         assert status_code == expected_status_code, \
             f"Error! Unexpected value returned for status code. Expected {expected_status_code}. Actual {status_code}."
+
+    def _close(self):
+        """
+        Close the requests session
+        :return:
+        """
+        self.__requests.close()
