@@ -2,6 +2,7 @@ import os
 import requests
 import logging as logger
 from dotenv import load_dotenv
+from typing import Optional
 
 load_dotenv(f"{os.getcwd()}/secrets.env")
 zephyr_token = os.environ.get("ZEPHYR_TOKEN")
@@ -25,15 +26,36 @@ class ZephyrBaseRequest:
     # ------------------------------------------------------------------------
     # Base requests
     # ------------------------------------------------------------------------
-    def _get(self, endpoint: str, expected_status_code: int = 200, **kwargs):
+
+    def __build_headers(self, additional_headers: Optional[dict[str, str]] = None):
         """
-        Wrapper for GET requests
+        Build headers for requests, if additional headers are provided,
+        they will be added to the default headers.
+
+        Example of additional headers:
+        {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        }
+        :param additional_headers:
         :return:
         """
-        if "content-length" in kwargs:
-            self.__header["content-length"] = kwargs["content-length"]
+        headers = self.__header.copy()
+        if additional_headers:
+            if type(additional_headers) is not dict:
+                raise TypeError("additional_headers must be a dictionary")
+            headers.update(additional_headers)
+        return headers
 
-        response = self.__requests.get(url=f"{self.__base_url}{endpoint}", headers=self.__header, **kwargs)
+    def _get(self, endpoint: str, expected_status_code: int = 200, **kwargs):
+        """
+        Wrapper for GET requests.
+        :return:
+        """
+        # If user specifies header as a parameter, remove it from kwargs and append it to the header
+        headers = self.__build_headers(additional_headers=kwargs.pop("headers", None))
+
+        response = self.__requests.get(url=f"{self.__base_url}{endpoint}", headers=headers, **kwargs)
         self.__validate_status_code(status_code=response.status_code, expected_status_code=expected_status_code)
         return response
 
@@ -42,12 +64,11 @@ class ZephyrBaseRequest:
         Wrapper for POST requests
         :return:
         """
-        if "content_length" in kwargs:
-            self.__header["content_length"] = kwargs["content_length"]
-            del (kwargs["content_length"])
+        # If user specifies header as a parameter, remove it from kwargs and append it to the header
+        headers = self.__build_headers(additional_headers=kwargs.pop("headers", None))
 
         response = self.__requests.post(url=f"{self.__base_url}{endpoint}", data=data,
-                                        json=json, headers=self.__header, **kwargs)
+                                        json=json, headers=headers, **kwargs)
         self.__validate_status_code(status_code=response.status_code, expected_status_code=expected_status_code)
         return response
 
